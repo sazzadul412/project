@@ -1,0 +1,5 @@
+#How to install Ansible on RHEL
+sudo yum update -y
+sudo amazon-linux-extras install epel -y
+sudo dnf install -y ansible-core
+ansible --version
