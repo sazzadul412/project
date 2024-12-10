@@ -1,9 +1,13 @@
 #for amazon linux2
-sudo dnf update
-sudo dnf install java-17-amazon-corretto -y
-sudo wget -O /etc/yum.repos.d/jenkins.repo \
-    https://pkg.jenkins.io/redhat-stable/jenkins.repo
-sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
-sudo dnf install jenkins -y
-sudo systemctl enable jenkins
-sudo systemctl start jenkins
+sudo yum update
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo -y
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+amazon-linux-extras install epel -y
+amazon-linux-extras install java-openjdk11 -y
+yum install jenkins -y
+
+# Start jenkins service
+service jenkins start
+
+# Setup Jenkins to start at boot,
+chkconfig jenkins on
