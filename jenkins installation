@@ -1,3 +1,4 @@
+#for amazon linux2
 #https://www.jenkins.io/download/
 
 sudo yum install wget -y
