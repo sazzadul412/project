@@ -12,5 +12,9 @@ passwd dockeradmin
 add a user to docker group to manage docker
 
 usermod -aG docker dockeradmin
+
+test
+
+docker run -d --name test-tomcat-server -p 8090:8080 tomcat:latest
 */
 
