@@ -1,6 +1,5 @@
 #How to install Ansible on RHEL
 sudo yum install python3 -y
-sudo alternatives --set python /usr/bin/python3
-sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y
-sudo yum -y install ansible
+sudo yum -y install python3-pip
+pip3 install ansible --user
 
