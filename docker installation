@@ -4,6 +4,10 @@ docker --version
 sudo systemctl start docker
 sudo systemctl status docker
 
+sudo systemctl enable docker.service
+sudo systemctl start docker.service
+sudo systemctl status docker.service
+
 /* Create a user called dockeradmin
 
 useradd dockeradmin
