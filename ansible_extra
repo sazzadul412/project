@@ -1,3 +1,5 @@
+https://cloudkatha.com/how-to-install-ansible-on-amazon-linux-2-instance/
+
 Method 3: Install Ansible on Amazon Linux 2 using pip
 Well if you see Ansible’s official installation instructions, it recommends installing it using pip – a package manager for Python packages.
 
