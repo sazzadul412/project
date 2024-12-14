@@ -1,0 +1,23 @@
+---
+- name: Push Docker image to Docker Hub
+  hosts: server
+  become: yes
+  vars:
+    docker_hub_username: sazzadulcloud  # Replace with your Docker Hub username
+    docker_hub_password: canadamontreal  # Replace with your Docker Hub password
+    image_name: simple-devops-image  # Replace with the local image name you want to push
+    image_tag: latest  # Replace with your desired tag
+    docker_hub_repo: sazzadulcloud/test  # Replace with the Docker Hub repo name
+  tasks:
+    - name: Log in to Docker Hub
+      docker_login:
+        username: "{{ docker_hub_username }}"
+        password: "{{ docker_hub_password }}"
+
+    - name: Tag the Docker image
+      command:
+        cmd: docker tag "{{ image_name }}:{{ image_tag }}" "{{ docker_hub_repo }}:{{ image_tag }}"
+
+    - name: Push the Docker image to Docker Hub
+      command:
+        cmd: docker push "{{ docker_hub_repo }}:{{ image_tag }}"
