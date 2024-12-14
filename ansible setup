@@ -1,0 +1,99 @@
+Prepare main  server
+
+1.Setup ec2 instance
+2.Setup hostname
+3.Create sadmin user
+4.Add user to sudoers file
+5.Enable password based login
+6.Generate ssh keys
+7.Install ansable
+
+
+1.Become a root user   --> sudo su -
+2  Change hostname  -->  vi /etc/hostname
+3  sudo systemctl reboot   
+4 Create a user sadmin ===  adduser  sadmin
+5 Passwd  sadmin123===== passwd sadmin
+6 Add sadmin ti this file --->vi /etc/sudoers or visudo
+
+sadmin   ALL=(ALL)   NOPASSWD:  ALL
+
+
+7 Change passwordauthentication no to yes --> sudo vi /etc/ssh/sshd_config
+
+
+
+
+
+
+
+8 sudo service sshd reload
+
+su - sadmin
+
+9 Switch to sadminssh-keygen
+
+su - sadmin
+
+10 ssh-keygen(should be in the sadmin user)
+
+
+
+
+
+
+
+Cd .ssh
+We can see  2 files there
+
+11 install ansible (see in the notes)
+
+
+
+
+Prepare managed nodes
+
+Setup ec2 instance
+Setup hostname
+Create sadmin user
+Add user to sudoers file
+Enable password based login
+
+
+Adding managed nodes to ansible
+
+In the main server
+ssh-copy-id sadmin@private ipaddress of managed node
+
+
+Ansible performs remote configuration by reading information
+from a file called inventory file.The default inventory file is
+present in /etc/ansible/hosts.
+In this file we should define the ip adress of all the managed hosts that we want ansible to control
+
+sudo vim   /etc/ansible/hosts
+
+
+Go into insert mode by pressing i
+Enter the ip adresses of all the managed hosts
+192.168.60.12
+192.168.60.13
+192.168.60.14
+192.168.60.15
+Save and quit(Esc :wq!)
+
+Test 
+
+ansible all -m setup 	: gives complete info about nodes
+ansible all -m ping	: gives the connection response
+
+
+
+
+
+
+
+
+ansible all  -a  'ls  -la'    ( you will get the list of the files in all managed nodes )
+
+
