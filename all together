@@ -1,0 +1,49 @@
+---
+- hosts: server
+  become: true
+  tasks:
+    - name: stop if we have old docker container
+      command: docker stop simple-devops-container
+      ignore_errors: yes
+
+    - name: remove stopped docker container
+      command: docker rm simple-devops-container
+      ignore_errors: yes
+
+    - name: remove current docker image
+      command: docker rmi simple-devops-image
+      ignore_errors: yes
+    #    register: result
+    #    failed_when:
+    #      - result.rc == 0
+    #      - '"docker" not in result.stdout'
+
+    - name: building docker image
+      command: docker build -t simple-devops-image .
+      args:
+        chdir: /home/dockeradmin/target
+
+    - name: creating docker container
+      command: docker run -d --name simple-devops-container -p 8082:8080 simple-devops-image
+- name: Push Docker image to Docker Hub
+  hosts: server
+  become: yes
+  vars:
+    docker_hub_username: sazzadulcloud # Replace with your Docker Hub username
+    docker_hub_password: canadamontreal # Replace with your Docker Hub password
+    image_name: simple-devops-image # Replace with the local image name you want to push
+    image_tag: latest # Replace with your desired tag
+    docker_hub_repo: sazzadulcloud/test # Replace with the Docker Hub repo name
+  tasks:
+    - name: Log in to Docker Hub
+      docker_login:
+        username: "{{ docker_hub_username }}"
+        password: "{{ docker_hub_password }}"
+
+    - name: Tag the Docker image
+      command:
+        cmd: docker tag "{{ image_name }}:{{ image_tag }}" "{{ docker_hub_repo }}:{{ image_tag }}"
+
+    - name: Push the Docker image to Docker Hub
+      command:
+        cmd: docker push "{{ docker_hub_repo }}:{{ image_tag }}"
