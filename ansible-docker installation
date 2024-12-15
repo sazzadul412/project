@@ -5,8 +5,8 @@ on Amazon EC2 instance
 
 Install python and python-pip
 
-yum install python
-yum install python-pip
+sudo yum install python
+sudo yum install python-pip
 
 Install ansible using pip check for version
 
