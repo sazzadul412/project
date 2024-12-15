@@ -1,7 +1,7 @@
 # Option-1 : Createting docker image using command module 
 ---
 - hosts: all
-  become: true
+  become: true  # Use become if you need root privileges for Docker operations
   tasks:
   - name: building docker image
     command: docker build -t simple-devops-image .
