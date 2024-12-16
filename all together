@@ -1,5 +1,5 @@
 ---
-- hosts: server
+- hosts: ansible_server
   become: true
   tasks:
     - name: stop if we have old docker container
@@ -19,31 +19,15 @@
     #      - '"docker" not in result.stdout'
 
     - name: building docker image
-      command: docker build -t simple-devops-image .
+      command: docker build -t myimg .
       args:
-        chdir: /home/dockeradmin/target
+        chdir: /home/sadmin/test
 
-    - name: creating docker container
-      command: docker run -d --name simple-devops-container -p 8082:8080 simple-devops-image
-- name: Push Docker image to Docker Hub
-  hosts: server
-  become: yes
-  vars:
-    docker_hub_username: sazzadulcloud # Replace with your Docker Hub username
-    docker_hub_password: canadamontreal # Replace with your Docker Hub password
-    image_name: simple-devops-image # Replace with the local image name you want to push
-    image_tag: latest # Replace with your desired tag
-    docker_hub_repo: sazzadulcloud/test # Replace with the Docker Hub repo name
-  tasks:
-    - name: Log in to Docker Hub
-      docker_login:
-        username: "{{ docker_hub_username }}"
-        password: "{{ docker_hub_password }}"
+    - name: create a tag
+      command: docker tag myimg sazzadulcloud/myimg:v1
 
-    - name: Tag the Docker image
-      command:
-        cmd: docker tag "{{ image_name }}:{{ image_tag }}" "{{ docker_hub_repo }}:{{ image_tag }}"
 
-    - name: Push the Docker image to Docker Hub
-      command:
-        cmd: docker push "{{ docker_hub_repo }}:{{ image_tag }}"
+    - name: push to docker hub
+      become_user: sadmin
+      command:  docker push sazzadulcloud/myimg:v1
+
