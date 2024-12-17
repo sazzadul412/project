@@ -1,0 +1,74 @@
+pipeline {
+    agent any
+
+    environment {
+        // Define any environment variables if needed
+        ANSIBLE_INVENTORY = "/etc/ansible/hosts"   // Adjust with your inventory file
+        PLAYBOOK_FILE = "/test/final.yml"             // Adjust with your playbook file
+    }
+
+    stages {
+	
+
+	
+	 stage('Checkout') {
+            steps {
+                // Checkout code from Git repository
+                git 'https://github.com/yankils/hello-world.git' // Change to your Git repo URL
+            }
+        }
+        
+        stage('Build with Maven') {
+            steps {
+                // Run Maven build command (e.g., to compile and package)
+                sh 'mvn clean package' // Use your Maven goals here (e.g., clean, install, package)
+            }
+        }
+	
+	
+	
+	
+	
+        stage('Publish Playbook Over SSH') {
+            steps {
+                script {
+                    // Use the Publish Over SSH plugin to transfer files
+                    sshPublisher(publishers: [
+                        sshPublisherDesc(
+                            configName: 'ansible', // Define the SSH configuration name
+                            transfers: [
+                                sshTransfer(
+                                    sourceFiles: '**/*.war',  // Path to your playbook
+                                    remoteDirectory: '/test', // Destination path on remote
+                                    removePrefix: '/webapp/target', // Optional, if you need to remove some prefix
+                                    execCommand: 'touch myfile345', // You can also add commands to be executed on the remote machine
+                                    
+                                )
+                            ]
+                        )
+                    ])
+                }
+            }
+        }
+
+        stage('Run Ansible Playbook') {
+            steps {
+                script {
+                    // Execute the Ansible playbook on the remote server
+                    sh """
+                        
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Ansible playbook executed successfully!'
+        }
+        failure {
+            echo 'Ansible playbook execution failed!'
+        }
+    }
+}
