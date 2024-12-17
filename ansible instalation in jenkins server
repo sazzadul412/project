@@ -1,0 +1,110 @@
+To install Ansible on a Jenkins server running CentOS, follow these steps. The process will involve installing the EPEL repository (which contains Ansible) and then installing Ansible using the yum package manager.
+
+Step-by-Step Instructions:
+1. Update the System
+Before you install any packages, it's a good practice to update your CentOS system to the latest versions of installed packages.
+
+bash
+Copy code
+sudo yum update -y
+2. Install the EPEL Repository
+Ansible is not available in the default CentOS repositories but is available through the EPEL (Extra Packages for Enterprise Linux) repository.
+
+To install the EPEL repository:
+
+bash
+Copy code
+sudo yum install epel-release -y
+3. Install Ansible
+Once the EPEL repository is installed, you can now install Ansible using the yum package manager:
+
+bash
+Copy code
+sudo yum install ansible -y
+4. Verify Ansible Installation
+After the installation is complete, verify that Ansible has been installed correctly by checking its version:
+
+bash
+Copy code
+ansible --version
+You should see output like this:
+
+javascript
+Copy code
+ansible 2.x.x
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = ['/usr/share/ansible']
+  ansible python module location = /usr/lib/python2.7/site-packages/ansible
+  executable location = /usr/bin/ansible
+  python version = 2.7.5 (default, Dec  2 2020, 05:18:51) [GCC 4.8.5 20150623 (Red Hat 4.8.5-44)]
+5. Ensure Ansible is Available for Jenkins
+To make sure that the Jenkins service (which runs as the jenkins user) can use Ansible, follow these steps:
+
+Check Ansible Path: First, check where Ansible was installed. It’s likely in /usr/bin/ansible, but you can verify it by running:
+
+bash
+Copy code
+which ansible
+It should return the path to Ansible, e.g., /usr/bin/ansible.
+
+Ensure Jenkins User Has Access to Ansible:
+
+If Jenkins is running as the jenkins user, you need to ensure that the Jenkins user has access to the ansible command.
+You can do this by ensuring the jenkins user has the correct PATH environment variable.
+You can check the jenkins user's environment by running:
+
+bash
+Copy code
+sudo su - jenkins
+echo $PATH
+If /usr/bin (or wherever Ansible is installed) isn't in the PATH, you can add it by modifying the .bash_profile or .bashrc for the jenkins user.
+
+Example:
+
+Edit the Jenkins user’s profile:
+
+bash
+Copy code
+sudo vi /var/lib/jenkins/.bash_profile
+Add the following line at the end:
+
+bash
+Copy code
+export PATH=$PATH:/usr/bin
+Reload the environment:
+
+bash
+Copy code
+source /var/lib/jenkins/.bash_profile
+6. Test Ansible in Jenkins
+Once Ansible is installed and accessible to the Jenkins user, you can now execute Ansible commands in Jenkins jobs.
+
+For example, in a Freestyle Project:
+
+Go to Jenkins > Your Job > Configure.
+
+Under Build, click Add build step and select Execute shell (for Linux).
+
+Enter the following shell command to test Ansible:
+
+bash
+Copy code
+ansible --version
+You should see the Ansible version output in the Jenkins build logs.
+
+7. Run Ansible Playbook in Jenkins
+You can also run an Ansible playbook in Jenkins by adding a build step to execute the playbook. Example:
+
+Go to Jenkins > Your Job > Configure.
+
+Under Build, click Add build step and select Execute shell.
+
+Enter the command to run your Ansible playbook, for example:
+
+bash
+Copy code
+ansible-playbook -i /path/to/inventory.ini /path/to/playbook.yml
+Save and run the Jenkins job. The playbook will run, and you can view the output in the console log.
+
+Conclusion
+To install Ansible on a CentOS-based Jenkins server, you need to install the EPEL repository, install Ansible using yum, and ensure the Jenkins user can access Ansible. After installation, you can run Ansible commands and playbooks as part of your Jenkins build jobs.
