@@ -2,13 +2,6 @@
 - hosts: ansible_server
   become: true
   tasks:
-    - name: stop if we have old docker container
-      command: docker stop simple-devops-container
-      ignore_errors: yes
-
-    - name: remove stopped docker container
-      command: docker rm simple-devops-container
-      ignore_errors: yes
 
     - name: remove current docker image
       command: docker rmi simple-devops-image
@@ -21,13 +14,14 @@
     - name: building docker image
       command: docker build -t myimg .
       args:
-        chdir: /home/sadmin/test
+        chdir: /root/test
 
     - name: create a tag
       command: docker tag myimg sazzadulcloud/myimg:v1
 
 
     - name: push to docker hub
-      become_user: sadmin
+      become_user: root
       command:  docker push sazzadulcloud/myimg:v1
+
 
