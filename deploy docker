@@ -2,5 +2,14 @@
 - hosts: docker_server
   become: true
   tasks:
+  - name: stop if we have old docker container
+    command: docker stop simple-devops-container
+    ignore_errors: yes
+
+  - name: remove stopped docker container
+    command: docker rm simple-devops-container
+    ignore_errors: yes
+
   - name: creating docker image
     command: docker run -d --name simple-devops-container -p 8089:8080 sazzadulcloud/myimg:v1
+
