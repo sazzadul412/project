@@ -39,6 +39,15 @@ yum install docker
 service docker start
 service docker start 
 
+
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo systemctl status docker
+
+
+
+
+
 # add user to docker group 
 usermod -aG docker ansadmin
 
